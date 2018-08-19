@@ -1,6 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
+const chalk =require("chalk")
+
+var  itemChosen = ""; 
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -16,6 +19,7 @@ var connection = mysql.createConnection({
 
   database: "bamazon"
 });
+
 
 // make the connection
 connection.connect(function(err) {
@@ -36,7 +40,7 @@ function displayItems() {
       inquirer.prompt ([
         {
         type: "input",
-        name: "id",
+        name: "userChoice",
         message: "Enter the ID of the the product you want to purchase?"
         },
         {
@@ -46,26 +50,42 @@ function displayItems() {
         }
       ])
       .then(function(answer) {
-        var itemChosen;
+      
+        
           for (var i=0; i < results.length; i++) {
-              if(results[i].id === parseInt(answer.itemNum))
+              if(results[i].ID === parseInt(answer.userChoice))
               {
                 itemChosen = results[i];
+
               }
           }
-        if (parseInt(answer.quantity) > itemChosen.stock_quantity) {
-          console.log("We don't have enough Inventory. \nPlease select a different amount.")
+          // console.log ("outside loop" + itemChosen[0]);
+        if (parseInt(answer.quantity) > itemChosen.Stock_Quantity) {
+          console.log(chalk.red("We don't have enough Inventory. \nPlease select a different amount."));
+          
         }
         else {
-          console.log("Order is fulfilled!  Your total is " + (itemChosen.price * parseInt(answers.quantity)))
+          console.log(chalk.green("Order is fulfilled!  Your total is " + parseFloat(itemChosen.Price * parseInt(answer.quantity))));
+          
         }
-        connection.end();
-      });
+
+        var updatedQuantity = parseInt(itemChosen.Stock_Quantity) - parseInt(answer.quantity);
+
+        connection.query("UPDATE products SET ? WHERE ?",
+        [{
+            Stock_Quantity: updatedQuantity      },
+        {
+            ID: answer.userChoice
+        }],
+        function (err) {
+            if (err) throw err; 
+      })
+      displayItems();
     });
     
+});
 }
   
 
 
-  
-
+ 
