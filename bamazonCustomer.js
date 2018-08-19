@@ -65,7 +65,8 @@ function displayItems() {
           
         }
         else {
-          console.log(chalk.green("Order is fulfilled!  Your total is " + parseFloat(itemChosen.Price * parseInt(answer.quantity))));
+          console.log(chalk.green("Order is fulfilled!  Your total is " + parseFloat(itemChosen.Price * parseInt(answer.quantity))
+        .toFixed(2)));
           
         }
 
