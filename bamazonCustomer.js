@@ -28,9 +28,9 @@ connection.connect(function(err) {
 
 // prompts the customer for an action
 function displayItems() {
-    connection.query("SELECT * FROM products", function(err, res) {
+    connection.query("SELECT * FROM products", function(err, results) {
       if (err) throw err;
-      console.table(res);
+      console.table(results);
 
     // Prompt for the input from the user
       inquirer.prompt ([
@@ -45,7 +45,22 @@ function displayItems() {
         message: "How many would you like to purchase?"  
         }
       ])
-
+      .then(function(answer) {
+        var itemChosen;
+          for (var i=0; i < results.length; i++) {
+              if(results[i].id === parseInt(answer.itemNum))
+              {
+                itemChosen = results[i];
+              }
+          }
+        if (parseInt(answer.quantity) > itemChosen.stock_quantity) {
+          console.log("We don't have enough Inventory. \nPlease select a different amount.")
+        }
+        else {
+          console.log("Order is fulfilled!  Your total is " + (itemChosen.price * parseInt(answers.quantity)))
+        }
+        connection.end();
+      });
     });
     
 }

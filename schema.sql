@@ -4,11 +4,11 @@ CREATE DATABASE Bamazon;
 USE Bamazon;
 
 CREATE TABLE products(
-  id INT NOT NULL AUTO_INCREMENT,
-  product_name VARCHAR(100) NOT NULL,
-  department_name VARCHAR(45) NOT NULL,
-  price DECIMAL(15,2) NULL,
-  stock_quantity INT (10) NULL,
+  ID INT NOT NULL AUTO_INCREMENT,
+  Product_Name VARCHAR(100) NOT NULL,
+  Department_Name VARCHAR(45) NOT NULL,
+  Price DECIMAL(15,2) NULL,
+  Stock_Quantity INT (10) NULL,
   PRIMARY KEY (id)
 );
 
