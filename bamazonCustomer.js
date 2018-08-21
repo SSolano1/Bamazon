@@ -62,16 +62,12 @@ function displayItems() {
           // console.log ("outside loop" + itemChosen[0]);
         if (parseInt(answer.quantity) > itemChosen.Stock_Quantity) {
           console.log(chalk.red("We don't have enough Inventory. \nPlease select a different amount."));
-          
-        }
+        } 
         else {
+          var updatedQuantity = parseInt(itemChosen.Stock_Quantity) - parseInt(answer.quantity);
           console.log(chalk.green("Order is fulfilled!  Your total is " + parseFloat(itemChosen.Price * parseInt(answer.quantity))
         .toFixed(2)));
-          
-        }
-
-        var updatedQuantity = parseInt(itemChosen.Stock_Quantity) - parseInt(answer.quantity);
-
+        
         connection.query("UPDATE products SET ? WHERE ?",
         [{
             Stock_Quantity: updatedQuantity      },
@@ -81,6 +77,9 @@ function displayItems() {
         function (err) {
             if (err) throw err; 
       })
+
+      }
+           
       displayItems();
     });
     
